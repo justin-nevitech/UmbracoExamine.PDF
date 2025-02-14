@@ -21,9 +21,8 @@ namespace UmbracoExamine.PDF
             int? parentId,
             IEnumerable<string> includeItemTypes = null,
             IEnumerable<string> excludeItemTypes = null)
-            : base(includeItemTypes, excludeItemTypes, null, null)
+            : this(parentId, false, includeItemTypes, excludeItemTypes)
         {
-            ParentId = parentId;
         }
 
         public PdfValueSetValidator(
@@ -37,6 +36,7 @@ namespace UmbracoExamine.PDF
             PublishedValuesOnly = publishedValuesOnly;
         }
 
+        // TODO (next major): make this method private
         public bool ValidatePath(string path)
         {
             //check if this document is a descendent of the parent
@@ -51,7 +51,7 @@ namespace UmbracoExamine.PDF
             return true;
         }
 
-        public bool ValidateRecycleBin(string path, string category)
+        private bool ValidateRecycleBin(string path, string category)
         {
             var recycleBinId = category == IndexTypes.Content
                 ? Constants.System.RecycleBinContentString

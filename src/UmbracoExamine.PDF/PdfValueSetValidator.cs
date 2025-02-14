@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Examine;
 using Umbraco.Cms.Core;
@@ -9,19 +10,31 @@ namespace UmbracoExamine.PDF
 {
     public class PdfValueSetValidator : ValueSetValidator
     {
-        public bool PublishedValuesOnly { get; }
-
         public int? ParentId { get; }
+
+        public bool PublishedValuesOnly { get; }
 
         private const string PathKey = "path";
 
-        public PdfValueSetValidator(bool publishedValuesOnly, 
+        [Obsolete("Please use the constructor taking all parameters. This constructor will be removed in a future version.")]
+        public PdfValueSetValidator(
             int? parentId,
-            IEnumerable<string> includeItemTypes = null, IEnumerable<string> excludeItemTypes = null)
+            IEnumerable<string> includeItemTypes = null,
+            IEnumerable<string> excludeItemTypes = null)
             : base(includeItemTypes, excludeItemTypes, null, null)
         {
-            PublishedValuesOnly = publishedValuesOnly;
             ParentId = parentId;
+        }
+
+        public PdfValueSetValidator(
+            int? parentId,
+            bool publishedValuesOnly,
+            IEnumerable<string> includeItemTypes = null,
+            IEnumerable<string> excludeItemTypes = null)
+            : base(includeItemTypes, excludeItemTypes, null, null)
+        {
+            ParentId = parentId;
+            PublishedValuesOnly = publishedValuesOnly;
         }
 
         public bool ValidatePath(string path)

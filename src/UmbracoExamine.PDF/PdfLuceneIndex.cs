@@ -55,7 +55,6 @@ namespace UmbracoExamine.PDF
                 return validationResult.Status;
             }).ToArray();
 
-            var hasDeletes = false;
             var hasUpdates = false;
 
             // ordering by descending so that Filtered/Failed processes first
@@ -73,8 +72,6 @@ namespace UmbracoExamine.PDF
                         // don't index anything that is invalid
                         break;
                     case ValueSetValidationStatus.Filtered:
-                        hasDeletes = true;
-
                         // these are the invalid/filtered items so we'll delete them
                         // since the path is not valid we need to delete this item in
                         // case it exists in the index already and has now
@@ -84,7 +81,7 @@ namespace UmbracoExamine.PDF
                 }
             }
 
-            if ((hasDeletes && !hasUpdates) || (!hasDeletes && !hasUpdates))
+            if (!hasUpdates)
             {
                 //we need to manually call the completed method
                 onComplete(new IndexOperationEventArgs(this, 0));
